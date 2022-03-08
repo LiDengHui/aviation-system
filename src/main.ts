@@ -1,0 +1,12 @@
+import { createApp } from 'vue';
+import App from './App.vue';
+import 'normalize.css';
+import { router } from './routes';
+import store from './store';
+import vant from 'vant';
+import 'vant/lib/index.css';
+const app = createApp(App);
+app.use(router);
+app.use(vant);
+app.use(store);
+app.mount('#app');
