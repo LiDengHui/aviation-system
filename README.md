@@ -5,6 +5,7 @@
 1. 安装nodejs
 2. cd 到项目根目录执行脚本
 > npm install pnpm -g
+
 > pnpm install 
 3. 跑测试代码
 > pnpm run test
