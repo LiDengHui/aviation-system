@@ -1,9 +1,16 @@
 import * as actions from './actions';
-import { bookFlight, changeStatus, getFlightList } from '../api/index';
+import {
+  bookFlight,
+  changeStatus,
+  getFlightList,
+  savePassenger,
+  getPassengerList,
+} from '../api/index';
 import { Commit } from 'vuex';
 import { createActionContext } from './utils';
 import { StateType } from './state';
-import { db } from '../fake/db';
+import { db } from '../test/db';
+
 jest.mock('../api/index');
 
 const changeStatusStub = changeStatus as jest.MockedFunction<
@@ -16,6 +23,13 @@ const getFlightListStub = getFlightList as jest.MockedFunction<
 
 const bookFlightStub = bookFlight as jest.MockedFunction<typeof bookFlight>;
 
+const savePassengerStub = savePassenger as jest.MockedFunction<
+  typeof savePassenger
+>;
+
+const getPassengerListStub = getPassengerList as jest.MockedFunction<
+  typeof getPassengerList
+>;
 describe('action', () => {
   const commitSpy = jest.fn() as jest.MockedFunction<Commit>;
 
@@ -25,6 +39,10 @@ describe('action', () => {
 
   beforeEach(() => {
     commitSpy.mockClear();
+    savePassengerStub.mockClear();
+    bookFlightStub.mockClear();
+    getFlightListStub.mockClear();
+    changeStatusStub.mockClear();
   });
   it('incrementAsync', async () => {
     changeStatusStub.mockResolvedValueOnce({
@@ -116,12 +134,15 @@ describe('action', () => {
           ],
         },
       });
-
+      savePassengerStub.mockResolvedValueOnce({
+        code: 200,
+        message: 'ok',
+      });
       const payload = {
         username: 'list',
         userId: '610322199302052914',
       };
-      const res = await actions.addPassenger(injectee, payload);
+      await actions.addPassenger(injectee, payload);
       expect(commitSpy).toHaveBeenCalledWith('addPassenger', payload);
     });
 
@@ -146,6 +167,31 @@ describe('action', () => {
       expect(res).toStrictEqual({
         message: '已添加账户，不能重复添加',
       });
+    });
+  });
+
+  describe('loadPassenger', () => {
+    it('happy pass', async () => {
+      getPassengerListStub.mockResolvedValueOnce(db.getPassengerList200);
+      const injectee = createActionContext<StateType, StateType>({
+        commit: commitSpy,
+      });
+      await actions.loadPassenger(injectee);
+
+      expect(commitSpy).toHaveBeenCalledWith(
+        'setPassenger',
+        db.getPassengerList200.data
+      );
+    });
+
+    it('not happy pass', async () => {
+      getPassengerListStub.mockResolvedValueOnce(db.getPassengerList500);
+      const injectee = createActionContext<StateType, StateType>({
+        commit: commitSpy,
+      });
+      await actions.loadPassenger(injectee);
+
+      expect(commitSpy).toHaveBeenCalledWith('setPassenger', undefined);
     });
   });
 });

@@ -36,11 +36,11 @@ app.post('/book-flight-contracts', (req, res) => {
   res.send(db.bookFlights200);
 });
 
-app.post('/save-passenger', (req, res) => {
+app.post('/passengers', (req, res) => {
   res.send(db.savePasserger200);
 });
 
-app.get('/get-passenger-list', (req, res) => {
+app.get('/passengers', (req, res) => {
   res.send(db.getPassengerList401);
 });
 

@@ -106,18 +106,26 @@ export const db = {
     message: 'ok',
     data: [
       {
-        username: '张三',
+        username: '张三1',
         userId: '6103221993020523456',
       },
       {
-        username: '王武',
+        username: '王武2',
         userId: '610322199302052914',
+      },
+      {
+        username: '王武3',
+        userId: '610322199302052917',
       },
     ],
   },
   getPassengerList401: {
     code: 401,
     message: '用户无权限访问',
+  },
+  getPassengerList500: {
+    code: 500,
+    message: '服务器内部错误',
   },
 
   savePassenger200: {

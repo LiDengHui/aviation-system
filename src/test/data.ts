@@ -4,10 +4,12 @@ import MockAdapter from 'axios-mock-adapter';
 export function StubUse(instance: AxiosInstance) {
   let Stub = new MockAdapter(instance);
 
-  Stub.onGet('test/200/response').reply(200, {
+  Stub.onGet('test/200/response').reply(200, 
+    {
     code: 200,
     message: 'ok',
-  });
+  }
+  );
   Stub.onGet('test/400/response').reply(400, {
     code: 400,
     message: 'bad request',

@@ -7,7 +7,7 @@ import {
 } from '.';
 import { IFlight } from '../model/flight';
 import { get, post } from './utils/request';
-import { db } from '../fake/db';
+import { db } from '../test/db';
 jest.mock('./utils/request');
 
 const getStub = get as jest.MockedFunction<typeof get>;

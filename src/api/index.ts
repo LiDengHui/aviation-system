@@ -37,11 +37,11 @@ export const bookFlight = async (
 };
 
 export const getPassengerList = async (): Promise<IResponse<IPassenger[]>> => {
-  const res = await get('/api/get-passenger-list');
+  const res = await get('/api/passengers');
   return res;
 };
 
 export const savePassenger = async (data: IPassenger): Promise<IResponse> => {
-  const res = await post('/api/save-passenger', data);
+  const res = await post('/api/passengers', data);
   return res;
 };

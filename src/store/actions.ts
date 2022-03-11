@@ -61,13 +61,21 @@ export const addPassenger = async (
   { commit, state }: IActionContext,
   payload: IPassenger
 ) => {
-  const exist = state.passengers?.some((item) => {
-    return item.userId === payload.userId;
-  });
-
+  let exist = false;
+  if (state.passengers) {
+    exist = state.passengers.some((item) => {
+      return item.userId === payload.userId;
+    });
+  }
   if (!exist) {
-    commit('addPassenger', payload);
-    await savePassenger(payload);
+    const res = await savePassenger(payload);
+    if (isValid(res)) {
+      commit('addPassenger', payload);
+    } else {
+      return {
+        message: res.message,
+      };
+    }
   } else {
     return {
       message: '已添加账户，不能重复添加',
@@ -75,7 +83,13 @@ export const addPassenger = async (
   }
 };
 
-export const loadPassenger = async ({ commit, state }: IActionContext) => {
-  const res = await getPassengerList();
+export const loadPassenger = async ({ commit }: IActionContext) => {
+  let res;
+  try {
+    res = await getPassengerList();
+  } catch (e) {
+    console.log(e);
+  }
+
   commit('setPassenger', res?.data);
 };

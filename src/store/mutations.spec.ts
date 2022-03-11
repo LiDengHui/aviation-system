@@ -1,4 +1,4 @@
-import { db } from '../fake/db';
+import { db } from '../test/db';
 import { IBookFlight } from '../model/bookFlight';
 import { IFlight } from '../model/flight';
 import { IPassenger } from '../model/passenger';
@@ -37,12 +37,7 @@ describe('mutations', () => {
   it('addPassenger', () => {
     const passengers: IPassenger[] = [];
     let state: StateType = { passengers };
-    const localStorageMock = {
-      getItem: jest.fn(),
-      setItem: jest.fn(),
-    };
 
-    (global as any).localStorage = localStorageMock;
     const passenger: IPassenger = {
       username: '张三',
       userId: '610122199302052897',
@@ -50,10 +45,6 @@ describe('mutations', () => {
 
     addPassenger(state, passenger);
     expect(state.passengers).toEqual(passengers);
-    expect(localStorageMock.setItem).toHaveBeenCalledWith(
-      'passengers',
-      JSON.stringify([passenger])
-    );
   });
 
   it('setBookFlight', () => {
@@ -68,22 +59,18 @@ describe('mutations', () => {
 
   describe('setPassenger', () => {
     it('happly pass', async () => {
-      const passengers: IPassenger[] = [];
-      let state: StateType = { passengers };
+      let state: StateType = { passengers: [] };
       const localStorageMock = {
         getItem: jest.fn(),
         setItem: jest.fn(),
       };
 
       (global as any).localStorage = localStorageMock;
-      const passenger: IPassenger = {
-        username: '张三',
-        userId: '610122199302052897',
-      };
+      const passengers: IPassenger[] = db.getPassengerList200.data;
 
-      setPassenger(state, [passenger]);
+      setPassenger(state, passengers);
 
-      expect(state.passengers).toStrictEqual([passenger]);
+      expect(state.passengers).toStrictEqual(passengers);
     });
 
     it(' no happly pass', async () => {
@@ -93,15 +80,12 @@ describe('mutations', () => {
         getItem: jest.fn(),
         setItem: jest.fn(),
       };
-
       (global as any).localStorage = localStorageMock;
-      const passenger: IPassenger = {
-        username: '张三',
-        userId: '610122199302052897',
-      };
-      localStorageMock.getItem.mockReturnValue(JSON.stringify([passenger]));
+      localStorageMock.getItem.mockReturnValue(
+        JSON.stringify(db.getPassengerList200)
+      );
       setPassenger(state);
-      expect(state.passengers).toStrictEqual([passenger]);
+      expect(state.passengers).toStrictEqual(db.getPassengerList200);
     });
   });
 });

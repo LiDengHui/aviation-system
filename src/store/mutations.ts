@@ -29,7 +29,6 @@ export const addPassenger: Mutation<StateType> = (
 ) => {
   state.passengers = state.passengers || [];
   state.passengers?.push({ ...payload });
-  localStorage.setItem('passengers', JSON.stringify(state.passengers));
 };
 
 export const setPassenger: Mutation<StateType> = (

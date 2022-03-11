@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { StubUse } from '../../fake/data';
+import { StubUse } from '../../test/data';
 
 const instance = axios.create({
   timeout: 3000,
